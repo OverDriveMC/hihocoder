@@ -4,6 +4,9 @@ using namespace std;
 struct Node{
     int cnt=0;
     Node* node[26];
+	/**
+	*构造的时候初始化为空,表示该单词还未存在
+	*/
     Node(){
         for(int i=0;i<26;i++){
             node[i]=NULL;
