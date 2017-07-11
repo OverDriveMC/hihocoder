@@ -133,6 +133,7 @@ node dfs(int len,int dig,bool begin_zero,bool limit,int sum){
             tmp=dfs(len-1,i,false,limit&& (i==end)   ,newsum);
         }
         res.n+=tmp.n;
+		///注意,这里必须先tmp.n*dig,然后取模,否则会越界
         res.s=( (res.s+tmp.s)%mod+ (tmp.n * dig %mod) *base[len-1]%mod ) %mod;
     }
     if(!limit){
