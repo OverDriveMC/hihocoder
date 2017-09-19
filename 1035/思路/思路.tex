@@ -1,0 +1,143 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[ paper=a4,UTF8, fontsize=11pt]{ctexart}
+\usepackage[top=1in, bottom=1in, left=1.25in, right=1.25in]{geometry}
+\usepackage{clrscode}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{float}
+\usepackage{diagbox}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{CJK} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{amssymb}
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage{bm}
+\usepackage{listings}
+\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+\begin{document}
+\begin{titlepage}
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize
+\textsc{School of Software, Tsinghua University} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge dp \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+
+\author{孟骋} % Your name
+\date{\normalsize\today} % Today's date or a custom date
+\maketitle % Print the title
+\end{titlepage}
+
+
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\newpage
+\begin{CJK}{UTF8}{song}
+使用dp[i][j]表示已经询问了子树的所有关键节点,人车的一个状态,其中:
+\begin{itemize}
+  \item j==0:人去,不管人是否回来
+  \item j==1:人去,人一定要回来
+  \item j==2:人车都去,人车都要回来
+  \item j==3:人车都去,人一定要回来,车不管
+  \item j==4:人车都去,不管人车最后是否回来
+\end{itemize}
+这里显然有dp[i][1]>=dp[i][0],dp[i][2]>=dp[i][3]>=dp[i][4] \par
+假设某个结点为fa,其某一子节点为son,w1(fa,son)表示步行的代价,w2(fa,son)表示开车的代价,则有:
+\begin{displaymath}
+  dp[fa][1]=\sum \left( dp[son][1] + 2*w1(fa,son)  \right)
+\end{displaymath}
+即遍历所有的子节点(w1(fa,son)),然后遍历子节点的所有子节点,并且回到子节点(dp[son][1]),然后从子节点回来(w1(fa,son))。 注意,这是一棵树,不存在环。  \par
+\begin{displaymath}
+  dp[fa][2]=\sum \left( \min(2*w1(fa,son)+dp[son][1] ,dp[son][2]+2*w2(fa,son))    \right)
+\end{displaymath}
+分为两种情况,一种是人步行去,然后步行回来,第二种是人车都去,人车都回来。  \par
+\begin{flalign}
+  temp &=\min(dp[son][0]-dp[son][1]-w1(fa,son)  )  \nonumber \\
+  temp &=\min(temp,0)  \nonumber \\
+  dp[fa][0] &=dp[fa][1]+temp  \nonumber 
+\end{flalign}
+分两种情况:
+\begin{itemize}
+  \item 人不回来,一个边选择为dp[son][0]+w1(fa,son),其它的都选择dp[son][1]+2*w1(fa,son)
+  \item 人回来,  所有边都为dp[son][1]+2*w1(fa,son)=dp[fa][1]
+\end{itemize}
+\begin{flalign}
+  t2 &=\min(dp[son][1]+2*w1(fa,son) ,dp[son][2]+2*w2(fa,son) ) =dp[fa][2]  \nonumber\\
+  t3 &=0  \nonumber \\
+  t3 &=\min(t3,w1(fa,son)+w2(fa,son)+dp[son][3]-t2 )   \nonumber \\
+  dp[fa][3] &=dp[fa][2]+t3              \nonumber
+\end{flalign}
+dp[fa][3]的决策方式:
+\begin{itemize}
+  \item 选择一个子节点开车去,然后步行回来(w2(fa,son)),其它的选择t2.
+  \item 都选择t2
+\end{itemize}
+等价于:
+\begin{displaymath}
+  dp[fa][3]=\min(dp[fa][2],  dp[fa][2] -t2+ w1(fa,son)+w2(fa,son)+dp[son][3])
+\end{displaymath}
+最后是dp[fa][4],从走的最后一棵子树考虑:
+\begin{itemize}
+  \item 走最后一棵子树时,还有车:最后一棵子树的选择是 $\min(w1(fa,son)+dp[son][0],w2(fa,son)+dp[son][4] )$,其它选择都是t2.或者全部都选择t2.
+  \item 走最后一棵子树时,没有车了。则最后一次为w1(fa,son)+dp[son][0],其余访问中,必定有一次人把车开走,且没开回来,这次是总的倒数第二次,即:w2(fa,son)+dp[son][3]+w1(fa,son),其余均为
+  t2.若最后人回来了,则退化为dp[fa][3].因为有两棵特殊的子树,类似上面的差值统计的时候,要避免两个差值代表同一个子树。\par
+  记:
+  \begin{flalign}
+    ff1 &=w1(fa,son)+w2(fa,son)+dp[son][3]-t2      \nonumber \\
+    ff2 &=w1(fa,son)+dp[son][0]-t2     \nonumber
+  \end{flalign}
+  目标是找到不同son,使得ff1+ff2最小。可以先去找ff1的最小和次小,并记录达到最小ff1的儿子match.再遍历一下所有儿子,如果此时的son就是match,那么配合ff1的次小值,否则配合最小值。
+\end{itemize}
+%----------------------------------------------------------------------------------------
+\end{CJK}
+
+\end{document}
