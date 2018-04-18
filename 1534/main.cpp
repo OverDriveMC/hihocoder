@@ -1,3 +1,12 @@
+/**
+A1 A2 ... Ap |  A(p+1)...A(q) | A(q+1)...A(N)
+S1= A1+A2+...+Ap
+S2=A(P+1)+...+A(q)
+S3=A(q+1)+...+A(N)
+每个划分保证|S1-S2| |S2-S3| |S3-S1|不超过1
+计算划分的个数
+*/
+
 #include<bits/stdc++.h>
 
 using namespace std;
