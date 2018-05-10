@@ -1,4 +1,5 @@
 /**
+http://codeforces.com/contest/106/problem/C
 一共有n个面团 和m种不同的材料以及食品
 每种食品有 ai种材料, 需要花费bi种材料以及ci个面团才能做成,每种售价di
 
