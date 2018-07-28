@@ -1,3 +1,17 @@
+/**
+https://www.lintcode.com/problem/expression-evaluation/description
+Example
+For the expression 2*6-(23+7)/(1+2),
+input is
+
+[
+  "2", "*", "6", "-", "(",
+  "23", "+", "7", ")", "/",
+  "(", "1", "+", "2", ")"
+],
+return 2
+*/
+
 public class Solution {
     /**
      * @param expression: a list of strings
